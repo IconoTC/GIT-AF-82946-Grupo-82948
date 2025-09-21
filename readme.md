@@ -1,0 +1,96 @@
+# Curso de Git
+
+- Duración: 20 horas
+- Modalidad: On-line
+- Fechas: 22, 23, 24 y 25 Septiembre 2025
+- Horario 9:30 – 14:30 hs.
+
+## Contenidos
+
+- Introducción
+  - Qué es un SCV y qué un SCV distribuido
+  - Historia de GIT: C, kernel linux, contexto (SVN, Mercurial, ...)
+  - Anatomía de un SCV distribuido | diferencias/parecidos con centralizados
+  - Instalación en Windows
+  - CheatSheets y Libros recomendados
+- Quick Start
+  - Primer repo (init), primer commit
+  - Configuración inicial: email y name
+  - add/commit y status/log/show
+  - Mensajes de commit
+  - Anatomía de un repositorio git: staging area, index and cache
+- Aprendiendo a referenciar revisiones y paths
+  - Anatomía de comandos típicos, referencias VS paths
+  - HEAD, master, HEAD~1 y otras referencias útiles
+  - Números de commit: SHA1, subcadena de SHA1
+  - Nombres de tags, de heads y de branches
+  - Referencias por mensaje de commit (:/cadena)
+  - Para saber más: SPECIFYING REVISIONS en "man gitrevparse"
+- Herramientas para preparar un buen commit en cualquier situación
+  - git add p
+  - git rm, git mv
+  - git diff
+  - git blame | git log Sstring
+  - .gitignore
+- Rescribiendo la historia
+  - amend
+  - checkout
+  - reset
+  - stash
+  - git clean n | git clean f
+  - revert
+  - rebase
+  - git bisect
+- Trabajando en paralelo
+  - branches
+    - crear, borrar, intercambiar
+    - crear desde ref (git checkout b mybranch master~1)
+  - tags: crear, usar
+  - patches: crear, aplicar
+  - remotes:
+    - remote v
+    - push/pull
+    - clones
+    - repos bare
+    - push branch, push tag
+  - resolución de conflictos
+  - merge VS rebase VS cherrypick
+  - Pull Request
+    - Creación
+    - Uso
+    - Merging
+    - Cierre
+- Utilidades
+  - GitK, GitG y git gui | git log graph | formato git log
+  - IntelliJ
+- Configuracion de git
+  - alias
+  - .gitconfig
+    - editor
+    - coloreado comandos
+    - formato salida comandos
+    - otras opciones
+  - Hooks
+    - cómo crear
+    - hooks de lado cliente: commits, emails, rebase, ...
+    - hooks de lado servidor: prereceive, postreceive, update
+- Subproyectos
+  - crear submodules
+  - workflow de commits
+  - git submodule status recursive
+  - git submodule foreach ...
+- Integración con otras herramientas y entornos
+  - SourceTree
+  - Github
+  - Gitlab
+  - Bitbucket
+- Buenas prácticas
+  - Commits atómicos
+  - Commits frecuentes
+  - No commits de trabajo a medias
+  - Test antes de commit
+  - Buenos mensajes de commit
+  - Usar branches, featurebranching
+  - Workflows
+    - Presentar las opciones más usadas
+    - Fijar un workflow común
