@@ -94,3 +94,43 @@
   - Workflows
     - Presentar las opciones más usadas
     - Fijar un workflow común
+
+## Calendario
+
+### Dia 1.a (Lunes 22/09/2025)
+
+Clase interrumpida por motivos técnicos
+
+- Presentación profesor / alumnos
+- Introducción: Qué es un SCV y qué un SCV distribuido
+- IDE / Editor de código: Visual Studio Code (VSC)
+- Terminales
+- Instalación de Git
+  Configuración inicial
+
+## Dia 1.b (Martes 23/09/2025)
+
+- Revisión: Instalación y configuración de Git
+- Primeros pasos con Git
+  - Primer repo (init), primer commit
+  - Anatomía de un repositorio git: staging area, index and cache
+  - Estados de un archivo: untracked, tracked (modified, staged, committed)
+  - add/commit y status/log/show
+  - Mensajes de commit
+- Anatomía de comandos típicos, referencias VS paths
+  - HEAD, master, HEAD~1 y otras referencias útiles
+  - Referencias por mensaje de commit (:/cadena)
+- Integración con otras herramientas y entornos
+  - Clientes gráficos
+  - Entornos de desarrollo
+  - Repositorios remotos: GitHub, GitLab, Bitbucket
+- Git internals
+  - Estructura de un repositorio git: .git
+  - Objetos git: blobs, trees, commits (y tags)
+  - Creación y lectura de objetos
+  - Creación del árbol de objetos en un primer commit
+  - Modificación del árbol de objetos en commits sucesivos
+  - Referencias: heads, tags y remotes
+  - Taller: creación de un repositorio git "a mano"
+
+## Dia 2 (Miércoles 24/09/2025)
