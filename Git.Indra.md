@@ -90,6 +90,10 @@
         - [Git bisect](#git-bisect)
     - [TRABAJANDO EN PARALELO](#trabajando-en-paralelo)
       - [Ramas (branches)](#ramas-branches)
+        - [Crear y seleccionar ramas](#crear-y-seleccionar-ramas)
+        - [Ver las ramas](#ver-las-ramas)
+        - [Borrar ramas](#borrar-ramas)
+        - [Mover y renombrar ramas](#mover-y-renombrar-ramas)
       - [Combinación de ramas: Merge y Rebase](#combinación-de-ramas-merge-y-rebase)
         - [Merge fast-forward](#merge-fast-forward)
         - [Merge recursive](#merge-recursive)
@@ -2065,6 +2069,12 @@ git stash
 git stash list
 ```
 
+Suben al stash todos los cambios no confirmados, pero no los archivos no rastreados (untracked files). Para incluirlos, se utiliza el modificador -u
+
+```shell
+git stash -u
+```
+
 Para recuperar los cambios guardados, se utiliza el comando `git stash apply` o `git stash pop`. La diferencia entre ambos es que `git stash apply` deja el cambio en la pila de cambios, mientras que `git stash pop` lo elimina de la pila.
 
 ```shell
@@ -2139,17 +2149,60 @@ git bisect reset
 
 #### Ramas (branches)
 
-Comandos para trabajar con ramas
+##### Crear y seleccionar ramas
 
 - `git branch`: Lista las ramas locales
 - `git branch nombre_rama`: Crea una nueva rama
 - `git checkout nombre_rama`: Cambia a la rama especificada
 - `git checkout -b nombre_rama`: Crea una nueva rama y cambia a ella
-- `git merge nombre_rama`: Fusiona la rama especificada con la rama actual
 
-- branches
-  - Crear, borrar, intercambiar
-  - Crear desde ref (git checkout b mybranch master~1)
+Se puede crear una rama a partir de un commit específico
+
+- `git branch nombre_rama <commit>`: Crea una nueva rama a partir del commit especificado
+- `git checkout -b nombre_rama <commit>`: Crea una nueva rama a partir del commit especificado y cambia a ella
+
+Ejemplos con checkout
+
+- Crear desde HEAD (`git checkout -b mybranch`)
+- Crear desde rama (`git checkout -b mybranch master`)
+- Crear desde commit (`git checkout -b mybranch <commit>` (e.g. `git checkout -b mybranch master~1`))
+
+##### Ver las ramas
+
+- `git branch`: Lista las ramas locales
+- `git branch -a`: Lista todas las ramas, locales y remotas
+- `git branch -r`: Lista las ramas remotas
+- `git branch --merged`: Muestra las ramas que han sido fusionadas en la rama actual
+- `git branch --no-merged`: Muestra las ramas que no han sido fusionadas en la rama actual
+- `git branch --contains <commit>`: Muestra las ramas que contienen el commit especificado
+
+##### Borrar ramas
+
+- `git branch -d nombre_rama`: Borra la rama especificada (solo si ha sido fusionada)
+- `git branch -D nombre_rama`: Borra la rama especificada (incluso si no ha sido fusionada)
+
+##### Mover y renombrar ramas
+
+- `git branch -m nombre_rama`: Cambia el nombre de la rama actual
+- `git branch -m nombre_rama_antiguo nombre_rama_nuevo`: Cambia el nombre de la rama especificada
+
+Para mover una rama a otro commit puede forzarse que se vuelva a crear en la posición deseada
+
+```shell
+git branch -f nombre_rama_existente <nuevo commit>
+```
+
+Otra posibilidad es situarse en la rama y hacer un reset al commit deseado
+
+```shell
+git checkout nombre_rama_existente
+git reset --hard <nuevo commit>
+```
+
+Otras operaciones con ramas
+
+- `git branch --set-upstream-to=origin/nombre_rama`: Establece la rama remota de seguimiento para la rama actual
+- `git branch --unset-upstream`: Elimina la rama remota de seguimiento para la rama actual
 
 #### Combinación de ramas: Merge y Rebase
 
@@ -2261,8 +2314,8 @@ Un repositorio remoto es una versión del proyecto que se encuentra alojada en u
 
 EL "servidor" puede ser
 
-- un **hosting** de repositorios Git, como **GitHub**, **GitLab** o **Bitbucket**
-- un servidor propio, en el que se instalara un servidor Git como **GitLab**, **Gitea** o **Gogs**
+- un **hosting** de repositorios Git, como **[GitHub](https://github.com)**, **[GitLab](https://about.gitlab.com)** o **[Bitbucket](https://bitbucket.org)**
+- un servidor propio, en el que se instalara un servidor Git como **[GitLab](https://gitlab.com)**, **[Gitea](https://about.gitea.com)** o **[Gogs](https://gogs.io)**
 
 Los **repositorios remotos**, alojados en los servidores, cualquier que sea su tipo, son una versión de repositorio algo diferente, conocida como **repositorio bare**.
 
@@ -2781,7 +2834,7 @@ El primer paso es añadir un repositorio ya existente como submodule al reposito
 git submodule add \<url\> [<path>]
 ```
 
-La url es la dirección del repositorio que se quiere añadir como submodule. 
+La url es la dirección del repositorio que se quiere añadir como submodule.
 El path es el directorio donde se quiere clonar el submodule. Si no se indica, se clona en un directorio con el mismo nombre que el repositorio. Un valor habitual para librerías externas es `vendor/nombre_libreria`
 
 El resultado es el equivalente a clonar el repositorio en el directorio indicado y añadir un fichero `.gitmodules` en el que se almacena los metadata con la información del submodule, como la url y el path.
@@ -2859,10 +2912,9 @@ Como se habrá actualizado el submodule apuntando al nuevo commit final de repo 
 
 ```shell
 cd ..
-git add nombre_submodule  
+git add nombre_submodule
 git commit -m "Actualizado submodule nombre_submodule"
 ```
-
 
 - Segunda opción
 

@@ -159,7 +159,7 @@ Clase interrumpida por motivos técnicos
     - squash y fixup: fusionando commits
     - drop: eliminando un commit
 
-<!-- ## Dia 3 (Jueves 25/09/2025)
+## Dia 3 (Jueves 25/09/2025)
 
 - Reescribiendo la historia (continuación)
   - Ref logs
@@ -168,4 +168,47 @@ Clase interrumpida por motivos técnicos
     - git clean
     - git revert
     - git bisect
-- Trabajando en paralelo -->
+- Trabajando en paralelo
+  - Ramas
+    - Crear y seleccionar
+      - Crear desde ref (Review)
+    - Ver ramas
+    - Borrar ramas
+    - Mover y renombrar ramas (Review)
+  - Combinación de ramas: Merge y Rebase
+    - git merge
+    - git rebase
+    - git cherry-pick
+    - Resolución de conflictos
+  - Repositorios remotos
+    - Repositorios "bare"
+    - Clonar repositorios: git clone
+    - git remote
+    - git push
+    - git pull (fetch + merge)
+  - Pull Request
+    - Creación
+    - Uso
+    - Merging -> actualización local
+    - Cierre
+
+<!-- ### Dia 4 (Viernes 26/09/2025)
+
+- Trabajando en paralelo (continuación)
+  - Tags
+  - Patches
+  - Workflows
+    - Presentar las opciones más usadas
+    - Fijar un workflow común
+  - Configuración de Git
+    - Hooks
+      - Hooks disponibles
+        - hooks de lado cliente: commits, emails, rebase, ...
+        - hooks de lado servidor: prereceive, postreceive, update
+      - Husky (Utilidad para gestionar hooks en JS)
+  - Submódulos
+    - Crear submódulos
+    - Workflow de commits
+    - git submodule status recursive
+    - git submodule foreach ...
+  - Buenas Prácticas -->
