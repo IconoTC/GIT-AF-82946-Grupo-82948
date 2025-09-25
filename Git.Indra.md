@@ -84,6 +84,10 @@
         - [drop: eliminando un commit](#drop-eliminando-un-commit)
       - [Ref logs](#ref-logs)
       - [Otros comandos](#otros-comandos)
+        - [Git stash](#git-stash)
+        - [Git clean](#git-clean)
+        - [Git revert](#git-revert)
+        - [Git bisect](#git-bisect)
     - [TRABAJANDO EN PARALELO](#trabajando-en-paralelo)
       - [Ramas (branches)](#ramas-branches)
       - [Combinación de ramas: Merge y Rebase](#combinación-de-ramas-merge-y-rebase)
@@ -115,7 +119,12 @@
     - [CONFIGURACIÓN DE GIT. Hooks](#configuración-de-git-hooks)
       - [Configuración. gitconfig](#configuración-gitconfig)
       - [Hooks](#hooks)
+        - [Husky](#husky)
     - [SUB-PROYECTOS](#sub-proyectos)
+      - [Submodules](#submodules)
+        - [Creación de un submodule](#creación-de-un-submodule)
+          - [Clonado de un repositorio con submodules: inicialización](#clonado-de-un-repositorio-con-submodules-inicialización)
+        - [Actualizaciones de un submodule](#actualizaciones-de-un-submodule)
     - [BUENAS PRÁCTICAS](#buenas-prácticas)
     - [Apéndice. UTILIDADES. INTEGRACIÓN CON OTRAS HERRAMIENTAS Y ENTORNOS](#apéndice-utilidades-integración-con-otras-herramientas-y-entornos)
 
@@ -1683,7 +1692,7 @@ git diff <branch1> <branch2>
 Para comparar dos ficheros
 
 ```shell
-git diff <file1> <file2>
+git diff --no-index <file1> <file2>
 ```
 
 En todos los casos, git tiene que calcular las diferencias, por lo que el resultado no es inmediato. Hay que recordar que en git no se almacenan las diferencias, sino los estados de los ficheros en cada commit.
@@ -2036,7 +2045,7 @@ git reflog list
 
 Esta información es muy util para conocer los commits "eliminados", es decir aquellos a los que ya no se puede acceder directamente desde las ramas, pero que siguen existiendo en el repositorio.
 
-Utilidades gráficas como gitk o la extensión Git Graph de Visual Studio Code permiten visualizar la información de los reflogs de una manera más intuitiva para el usuario.
+Utilidades gráficas como `gitk` o la extensión `Git Graph` de Visual Studio Code permiten visualizar la información de los reflogs de una manera más intuitiva para el usuario.
 
 #### Otros comandos
 
@@ -2046,6 +2055,85 @@ Utilidades gráficas como gitk o la extensión Git Graph de Visual Studio Code p
   - git clean -f: elimina los ficheros
 - git revert: crea un nuevo commit que deshace los cambios de un commit anterior
 - git bisect: busca un commit que introdujo un error
+
+##### Git stash
+
+El comando `git stash` permite guardar los cambios en un commit temporal, que se almacena en una pila de cambios. Se puede recuperar en cualquier momento.
+
+```shell
+git stash
+git stash list
+```
+
+Para recuperar los cambios guardados, se utiliza el comando `git stash apply` o `git stash pop`. La diferencia entre ambos es que `git stash apply` deja el cambio en la pila de cambios, mientras que `git stash pop` lo elimina de la pila.
+
+```shell
+git stash apply
+git stash pop
+```
+
+Una vez que se han recuperado los cambios, se puede eliminar el commit temporal con el comando `git stash drop` o `git stash clear`. La diferencia entre ambos es que `git stash drop` elimina el commit temporal más reciente, mientras que `git stash clear` elimina todos los commits temporales.
+
+```shell
+git stash drop
+git stash clear
+```
+
+##### Git clean
+
+El comando `git clean` permite eliminar los ficheros no rastreados por Git. Es decir, los ficheros que no están en el área de preparación ni en el último commit.
+
+```shell
+git clean -n
+```
+
+Muestra los ficheros que se eliminarán, sin eliminarlos realmente.
+
+```shell
+git clean -f
+```
+
+Elimina los ficheros no rastreados por Git.
+
+El modificador -d indica que se eliminarán también los directorios no rastreados por Git.
+
+```shell
+git clean -fd
+```
+
+##### Git revert
+
+El comando `git revert` permite crear un nuevo commit que deshace los cambios de un commit anterior. A diferencia de `git reset`, que mueve el puntero de la rama a un commit anterior, `git revert` crea un nuevo commit que deshace los cambios del commit especificado.
+
+```shell
+git revert <commit>
+```
+
+Crea un nuevo commit que deshace los cambios del commit especificado.
+
+```shell
+git revert HEAD~1
+```
+
+Por ejemplo, el comando anterior, crea un nuevo commit que deshace los cambios del commit anterior al último commit.
+
+##### Git bisect
+
+El comando `git bisect` permite buscar un commit que introdujo un error en el código. Utiliza una búsqueda binaria para encontrar el commit problemático de manera eficiente.
+
+```shell
+git bisect start
+git bisect bad # Marca el commit actual como malo
+git bisect good <commit> # Marca un commit anterior como bueno
+```
+
+A partir de aquí, Git hará un checkout de un commit intermedio y te permitirá probar si el error está presente o no. Debes usar `git bisect good` o `git bisect bad` para marcar cada commit como bueno o malo hasta que encuentres el commit problemático.
+
+Cuando hayas encontrado el commit problemático, puedes usar el comando `git bisect reset` para volver al estado original del repositorio.
+
+```shell
+git bisect reset
+```
 
 ### TRABAJANDO EN PARALELO
 
@@ -2630,16 +2718,170 @@ Referencias
 
 #### Hooks
 
-- Cómo crear
+Los hooks son scripts que se ejecutan automáticamente en determinados momentos del ciclo de vida de un repositorio Git. Permiten automatizar tareas, como la validación de código, la ejecución de tests, el envío de notificaciones, etc.
+
+Podemos encontrar información sobre su funcionamiento
+
+- en la documentación oficial de Git: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+- el el libro Pro Git: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+
+Al inicializar un nuevo repositorio con `git init`, Git llena el directorio de hooks `.git/hooks` con varios scripts de ejemplo, muchos de los cuales son útiles por sí mismos; además, documentan los valores de entrada de cada script. Todos los ejemplos están escritos como `scripts de shell`, con algo de `Perl`, pero cualquier script ejecutable con un nombre correcto funcionará correctamente; (`Ruby`, `Python`...). Si quieres usar los scripts de hook incluidos, tendrás que renombrarlos; todos sus nombres de archivo terminan en .sample.
+
+Los hooks que se encuentran inicialmente en el directorio `.git/hooks` del repositorio son los siguientes:
+
+- prepare-commit-msg.sample -> Preparar el mensaje de commit
+- commit-msg.sample -> Validar el mensaje de commit
+- pre-commit.sample -> Validar los cambios antes de hacer un commit
+- push-to-checkout.sample -> Validar los cambios antes de hacer un checkout
+- pre-merge-commit.sample -> Validar los cambios antes de hacer un merge
+- pre-rebase.sample -> Validar los cambios antes de hacer un rebase
+- pre-push.sample -> Validar los cambios antes de hacer un push
+- pre-receive.sample -> Validar los cambios antes de recibir un push
+
+- update.sample -> Validar los cambios antes de hacer un update
+- post-update.sample -> Notificar a los usuarios sobre actualizaciones
+- applypatch-msg.sample -> Validar los mensajes de los parches aplicados
+- pre-applypatch.sample -> Validar los parches antes de aplicarlos
+- fsmonitor-watchman.sample -> Integración con Watchman para mejorar el rendimiento de git status
+- sendemail-validate.sample -> Validar los correos electrónicos enviados
+
+Estos hooks se pueden clasificar en dos tipos:
+
 - hooks de lado cliente: commits, emails, rebase, ...
 - hooks de lado servidor: prereceive, postreceive, update
 
+Los hooks de lado cliente se ejecutan en el equipo del desarrollador y permiten validar los cambios antes de hacer un commit, un push, un rebase, etc.
+Los hooks de lado servidor se ejecutan en el servidor y permiten validar los cambios antes de recibir un push, notificar a los usuarios sobre actualizaciones, etc.
+
+##### Husky
+
+[Husky](https://typicode.github.io/husky/#/) es una herramienta que facilita la gestión de hooks en proyectos de JavaScript que utilizan Git.
+
 ### SUB-PROYECTOS
 
-- Crear submodules
-- workflow de commits
-- git submodule status recursive
-- git submodule foreach ...
+Existen varias formas de incluir un subproyecto en un proyecto Git
+
+- Submodules
+- Subtree
+- Subrepo (opción extra, no incluida en Git)
+
+Los submodules son la opción más utilizada y la que mejor se integra con Git. Permiten incluir un repositorio Git dentro de otro repositorio Git, manteniendo ambos repositorios independientes.
+Los subtree permiten incluir un repositorio Git dentro de otro repositorio Git, pero integrando ambos repositorios en uno solo. No mantienen la independencia entre ambos repositorios.
+
+#### Submodules
+
+Los submodules son una característica de Git que permite incluir un repositorio Git dentro de otro repositorio Git, manteniendo ambos repositorios independientes.
+Los submodules son útiles cuando se quiere incluir una librería, un framework, un plugin, etc. en un proyecto, pero se quiere mantener la independencia entre ambos proyectos.
+
+##### Creación de un submodule
+
+El primer paso es añadir un repositorio ya existente como submodule al repositorio principal con el comando `git submodule add`
+
+```shell
+git submodule add \<url\> [<path>]
+```
+
+La url es la dirección del repositorio que se quiere añadir como submodule. 
+El path es el directorio donde se quiere clonar el submodule. Si no se indica, se clona en un directorio con el mismo nombre que el repositorio. Un valor habitual para librerías externas es `vendor/nombre_libreria`
+
+El resultado es el equivalente a clonar el repositorio en el directorio indicado y añadir un fichero `.gitmodules` en el que se almacena los metadata con la información del submodule, como la url y el path.
+
+Si despues de añadir el submodule se hace un `git status`, se verá que hay dos cambios pendientes de commit
+
+- el fichero `.gitmodules`
+- el directorio del submodule, que se muestra como un nuevo fichero, con el nombre del submodule y el hash del commit al que apunta
+
+```shell
+git status
+On branch main
+new file:   .gitmodules
+new file:   nombre_submodule (new commits)
+```
+
+Si hacemos git add y git diff, veremos que no muestra los cambios en el submodule como una carpeta, sino como el hash del commit al que apunta el submodule.
+
+```shell
+git add .
+git diff --cached
+diff --git a/.gitmodules b/.gitmodules
+new file mode 100644
+index 0000000..e69de29
+--- /dev/null
++++ b/.gitmodules
+@@ -0,0 +1,3 @@
++ [submodule "nombre_submodule"]
++	path = nombre_submodule
++	url = <url>
+diff --git a/nombre_submodule b/nombre_submodule
+new file mode 160000
+index 0000000..4b825dc
+--- /dev/null
++++ b/nombre_submodule
+@@ -0,0 +1 @@
++Subproject commit 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+```
+
+Lo siguiente paso es hacer un commit para guardar los cambios en el repositorio principal.
+
+```shell
+git commit -m "Añadido submodule nombre_submodule"
+```
+
+###### Clonado de un repositorio con submodules: inicialización
+
+Cuando se clona un repositorio que contiene submodules, los submodules no se clonan automáticamente. Se crea la estructura de directorios, pero no se descargan los ficheros del submodule. Es necesario inicializarlos y actualizarlos con los comandos `git submodule init` (para registrar el submodule) y `git submodule update` (para descargar los ficheros del submodule)
+
+```shell
+git submodule init
+git submodule update
+```
+
+Si se quiere clonar el repositorio y los submodules en un solo paso, se puede utilizar el modificador `--recurse-submodules` del comando `git clone`
+
+```shell
+git clone --recurse-submodules <url>
+```
+
+##### Actualizaciones de un submodule
+
+Los submodules son independientes del repositorio principal, por lo que se pueden actualizar de forma independiente. Para actualizar un submodule, existen dos mecanismos.
+
+- Primera opción
+
+se debe entrar en el directorio del submodule y hacer un `git pull` para descargar los cambios del repositorio remoto del submodule.
+
+```shell
+cd nombre_submodule
+git pull
+```
+
+Como se habrá actualizado el submodule apuntando al nuevo commit final de repo al que apunta , el repositorio principal detectará que hay cambios pendientes de commit en el submodule. Se debe hacer un `git add` y un `git commit` para guardar los cambios en el repositorio principal.
+
+```shell
+cd ..
+git add nombre_submodule  
+git commit -m "Actualizado submodule nombre_submodule"
+```
+
+
+- Segunda opción
+
+Se puede actualizar el submodule desde el repositorio principal, sin entrar en el directorio del submodule, con el comando `git submodule update --remote`
+
+```shell
+git submodule update --remote --recursive
+```
+
+De esta forma se actualizarían todos los submódulos que haya en el repositorio, incluidos los submódulos de los submódulos (si los hubiera).
+
+Como en el caso anterior, se debe hacer un `git add` y un `git commit` para guardar los cambios en el repositorio principal.
+
+```shell
+git add .
+git commit -m "Actualizado submodule nombre_submodule"
+```
+
+Cuando otros usuarios han actualizado los submodulos y lo han reflejado en el repo compartido, al hacer un `git pull` en el repositorio principal, los submodules no se actualizan automáticamente. Se debe hacer un `git pull --recurse-submodules` para actualizar los submodules a la versión que indica el repositorio principal.
 
 ### BUENAS PRÁCTICAS
 

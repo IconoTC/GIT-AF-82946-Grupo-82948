@@ -113,9 +113,9 @@ Clase interrumpida por motivos técnicos
 - Revisión: Instalación y configuración de Git
 - Primeros pasos con Git
   - Primer repo (init), primer commit
-  - Anatomía de un repositorio git: staging area, index and cache
-  - Estados de un archivo: untracked, tracked (modified, staged, committed)
-  - add/commit y status/log/show
+  - Anatomía de un repositorio git: working directory, staging area (index o cache) y repositorio (.git)
+  - Estados de un archivo: untracked (U), tracked (modified (M), staged (A), committed)
+  - add/commit/reset y status/log/show
   - Mensajes de commit
 - Anatomía de comandos típicos, referencias VS paths
   - HEAD, master, HEAD~1 y otras referencias útiles
@@ -130,7 +130,42 @@ Clase interrumpida por motivos técnicos
   - Creación y lectura de objetos
   - Creación del árbol de objetos en un primer commit
   - Modificación del árbol de objetos en commits sucesivos
-  - Referencias: heads, tags y remotes
+  - Referencias: heads, ramas (tags y remotes)
   - Taller: creación de un repositorio git "a mano"
 
 ## Dia 2 (Miércoles 24/09/2025)
+
+- Herramientas para preparar un buen commit en cualquier situación
+  - Comprobar el repositorio. Git log
+  - Alias
+  - Operaciones en la Staging Area (Index)
+    - Añadir ficheros
+    - Eliminar de la Staging Area (Index)
+  - Eliminar ficheros
+    - Problemas con .gitignore
+  - Cambiar nombre de ficheros
+  - git diff
+  - git blame
+  - Recapitulando: Git básico
+- Reescribiendo la historia
+  - Advertencia
+  - git command --amend
+  - git checkout
+    - git checkout a nivel de archivo
+  - git reset
+    - git reset a nivel de archivo
+  - rebase interactivo
+    - edit: modificando un commit
+    - squash y fixup: fusionando commits
+    - drop: eliminando un commit
+
+<!-- ## Dia 3 (Jueves 25/09/2025)
+
+- Reescribiendo la historia (continuación)
+  - Ref logs
+  - Otros comandos
+    - git stash
+    - git clean
+    - git revert
+    - git bisect
+- Trabajando en paralelo -->
