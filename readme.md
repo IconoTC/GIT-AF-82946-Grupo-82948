@@ -200,6 +200,7 @@ Clase interrumpida por motivos técnicos
   - Workflows
     - Presentar las opciones más usadas
     - Fijar un workflow común
+  - Buenas Prácticas
   - Configuración de Git
     - Hooks
       - Hooks disponibles
@@ -209,6 +210,3 @@ Clase interrumpida por motivos técnicos
   - Submódulos
     - Crear submódulos
     - Workflow de commits
-    - git submodule status recursive
-    - git submodule foreach ...
-  - Buenas Prácticas
