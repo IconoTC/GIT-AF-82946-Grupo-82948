@@ -171,10 +171,10 @@ Clase interrumpida por motivos técnicos
 - Trabajando en paralelo
   - Ramas
     - Crear y seleccionar
-      - Crear desde ref (Review)
+      - Crear desde referencia
     - Ver ramas
     - Borrar ramas
-    - Mover y renombrar ramas (Review)
+    - Mover y renombrar ramas
   - Combinación de ramas: Merge y Rebase
     - git merge
     - git rebase
@@ -186,13 +186,13 @@ Clase interrumpida por motivos técnicos
     - git remote
     - git push
     - git pull (fetch + merge)
-  - Pull Request
+  - Pull Request / Merge Request
     - Creación
     - Uso
     - Merging -> actualización local
     - Cierre
 
-<!-- ### Dia 4 (Viernes 26/09/2025)
+### Dia 4 (Viernes 26/09/2025)
 
 - Trabajando en paralelo (continuación)
   - Tags
@@ -211,4 +211,4 @@ Clase interrumpida por motivos técnicos
     - Workflow de commits
     - git submodule status recursive
     - git submodule foreach ...
-  - Buenas Prácticas -->
+  - Buenas Prácticas
